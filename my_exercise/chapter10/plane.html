@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>First class functions</title>
+    <script>
+        var passengers = [{name: "Jane Doloop", paid: true, ticket: "coach"},
+            {name: "Dr. Evel", paid: true, ticket: "firstclass"},
+            {name: "Sue Property", paid: false, ticket: "firstclass"},
+            {name: "John Funcall", paid: true, ticket: "premium"}];
+
+        // 可以将函数传递给函数
+        function processPassengers(passengers, test) {
+            for (var i = 0; i < passengers.length; i++) {
+                if (test(passengers[i])) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        function checkNoFlyList(passenger) {
+            return (passenger.name === "Dr. Evel");
+        }
+
+        function checkNotPaid(passenger) {
+            return (!passenger.paid);
+        }
+
+        function printPassenger(passenger) {
+            var message = passenger.name;
+            if (passenger.paid) {
+                message = message + " has paid";
+            } else {
+                message = message + " has not paid";
+            }
+            console.log(message);
+            return false;
+        }
+
+        //
+        // plane can only fly if every passenger is on the fly flist
+        //
+        var allCanFly = processPassengers(passengers, checkNoFlyList);
+        if (!allCanFly) {
+            console.log("The plane can't take off: we have a passenger on the no fly list.");
+        }
+
+        //
+        // plane can only fly if every passenger has paid
+        //
+        var allPaid = processPassengers(passengers, checkNotPaid);
+        if (!allPaid) {
+            console.log("The plane can't take off: not everyone has paid.");
+        }
+
+        //
+        // we don't care about the result here; we're just using
+        // processPassengers to display the passenger list
+        //
+        processPassengers(passengers, printPassenger);
+
+
+        // 可以从函数返回函数
+        function serveCustomer(passenger) {
+            var getDrinkOrderFunction = createDrinkOrder(passenger);
+            var getDinnerOrderFunction = createDinnerOrder(passenger);
+            // 每当需要让乘客点饮料时，我们都调用createDrinkOrder返回的那个函数
+            getDrinkOrderFunction();
+
+            // get dinner order
+            getDinnerOrderFunction();
+
+            // 让乘客点餐
+            getDrinkOrderFunction();
+            getDrinkOrderFunction();
+            // 播放电影
+            getDrinkOrderFunction();
+            // 清理垃圾
+        }
+
+        function createDrinkOrder(passenger) {
+            var orderFunction;
+            if (passenger.ticket === "firstclass") {
+                orderFunction = function () {
+                    alert("Would you like a cocktail or wine?");
+                }
+            } else if (passenger.ticket === "premium"){
+                orderFunction = function () {
+                    alert("Would you like wine, cola or water?");
+                }
+            } else {
+                orderFunction = function () {
+                    alert("Your choice is cola or water.");
+                }
+            }
+            return orderFunction;
+        }
+
+        function createDinnerOrder(passenger) {
+            var orderFunction;
+            if (passenger.ticket === "firstclass") {
+                orderFunction = function () {
+                    alert("Would you like chicken or pasta?");
+                }
+            } else if (passenger.ticket === "premium") {
+                orderFunction = function () {
+                    alert("Would you like a snack box or cheese plate?");
+                }
+            } else {
+                orderFunction = function () {
+                    alert("Would you like peanuts or pretzels?");
+                }
+            }
+            return orderFunction;
+        }
+
+        function servePassengers(passengers) {
+            for (var i = 0; i < passengers.length; i++) {
+                serveCustomer(passengers[i]);
+            }
+        }
+
+        servePassengers(passengers);
+    </script>
+</head>
+<body>
+
+</body>
+</html>
