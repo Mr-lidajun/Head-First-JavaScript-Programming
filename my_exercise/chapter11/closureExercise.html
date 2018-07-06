@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Closure exercise</title>
+    <script>
+
+        // 1.makePassword将实际密码作为参数， 它返回一个这样的函数：将猜测的密码作为参数，
+        // 并在猜测的密码与实际密码相同时返回true。（对于这些有关闭包的描述， 可能需要读 几遍才能明白。）
+        function makePassword(password) {
+            return function (passwordGuess) {
+                return (passwordGuess === password);
+            };
+        };
+
+        var makeFunction = makePassword("123456");
+        console.log(makeFunction("123"));
+        console.log(makeFunction("123456"));
+
+        // 2.函数multN将一个数字（n）作为参数， 并返回一个这样的函数：将一个数字作为参数， 并返回它与n的乘积。
+        function multN(n) {
+            return function (number) {
+                return number * n;
+            };
+        };
+
+        var multNFunction = multN("6");
+        console.log(multNFunction("6"));
+
+        // 3.修改前面的计数器， 让makeCounter与以前一样不接受任何参数， 但使其定义变量 count，
+        // 再创建并返回一个对象。这个对象包含一个方法increment，它将变量count 加1，再返回这个变量。
+        function makeCounter() {
+            var count = 0;
+
+            return {
+                increment: function () {
+                    count = count + 1;
+                    return count;
+                }
+            };
+        }
+
+        var counter = makeCounter();
+        console.log(counter.increment());
+        console.log(counter.increment());
+        console.log(counter.increment());
+
+    </script>
+</head>
+<body>
+
+</body>
+</html>
